@@ -26,7 +26,7 @@ app.use("/messages", messageRouter);
 app.use(cors(corsOptions));
 
 mongoose.connect(
-  "mongodb+srv://user1:abcd12345@cluster0.lbqhxrk.mongodb.net/DataEntry"
+  "mongodb+srv://userApp:chatadmin@projectfree.yvyg4.mongodb.net/"
 );
 
 const server = app.listen(PORT, () => {

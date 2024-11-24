@@ -125,9 +125,11 @@ const Form = ({
             <button type="submit" className="reg-btn">
               {label}
             </button>
-            {label==="LOGIN"?( <span>
+            {label==="REGISTER"?( <span>
               already have an account ? <Link to="/login">Login</Link>
-            </span>):(<></>)}
+            </span>):(<span>
+              dont have an account ? <Link to="/register">Register</Link>
+            </span>)}
           
           </div>
         </form>
