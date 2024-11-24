@@ -1,15 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
 import { useUser } from "./UserContext";
 import styled from "styled-components";
-
+import loader from "../assets/loader.gif";
+import ErrorModal from "../components/ErrorModal";
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+
+ 
+
+  useEffect(() => {
+   
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500); 
+
+    
+    return () => clearTimeout(timeout);
+  }, []);
+
+ 
+
+
   const onSubmit = async (event) => {
     event.preventDefault();
 
@@ -33,6 +51,7 @@ const Register = () => {
       setPassword={setPassword}
       label="REGISTER"
       onSubmit={onSubmit}
+      isLoading={isLoading}
     />
   );
 };
@@ -41,7 +60,20 @@ const Login = () => {
   const { currentUser, setCurrentUser } = useUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const[error,setError] =useState(false);
   const navigate = useNavigate();
+
+  
+  useEffect(() => {
+   
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500); 
+
+    
+    return () => clearTimeout(timeout);
+  }, []);
 
   // const [, setCookies] = useCookies(["access_token"]);
   const onSubmit = async (event) => {
@@ -59,7 +91,7 @@ const Login = () => {
       setPassword("")
       setUsername("")
       } else {
-        alert(response.data.message);
+        setError(true);
       }
     } catch (err) {
       console.error(err);
@@ -73,7 +105,10 @@ const Login = () => {
       setPassword={setPassword}
       label="LOGIN"
       onSubmit={onSubmit}
+      isLoading={isLoading}
+      error={error}
     />
+
   );
 };
 
@@ -84,8 +119,17 @@ const Form = ({
   setPassword,
   label,
   onSubmit,
+  isLoading,
+  error
 }) => {
   return (
+    <>
+    {error && <ErrorModal/>}
+    {isLoading?(
+       <Container>
+          <img src={loader} alt="" className="loader" />
+        </Container>
+    ):(
     <Container>
     <div className="auth-body">
       <div className="auth-container">
@@ -135,11 +179,19 @@ const Form = ({
         </form>
       </div>
     </div>
-    </Container>
+    </Container>)}</>
   );
 };
 
 const Container = styled.div`
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+  background-color: #131324;
 
 .auth-body {
   height: 100vh;
